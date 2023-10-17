@@ -2,7 +2,8 @@ package ar.edu.unlu.cuenta;
 
 import java.time.LocalDate;
 
-public class CuentaNormal extends Cuenta{
+public class CuentaNormal{
+    private double saldo;
     private double limiteGiroDescubierto;
     private double giroDescubierto;
     private double saldoInvertido;
@@ -14,7 +15,7 @@ public class CuentaNormal extends Cuenta{
     private boolean preCancel = false;
 
     public CuentaNormal(double saldo, double limiteGiroDescubierto) {
-        super(saldo);
+        this.saldo = saldo;
         this.limiteGiroDescubierto = limiteGiroDescubierto;
         this.giroDescubierto = 0;
         this.saldoInvertido = 0;
@@ -32,7 +33,7 @@ public class CuentaNormal extends Cuenta{
     public boolean gastar(double monto) {
         boolean res = false;
 
-        if ((super.getSaldo() + (this.limiteGiroDescubierto-this.giroDescubierto)) >= monto) {
+        if ((this.saldo + (this.limiteGiroDescubierto-this.giroDescubierto)) >= monto) {
             if (getSaldo() < monto) {
                 //verifico si la precancelacion esta activada
                 if (preCancel){
@@ -40,7 +41,7 @@ public class CuentaNormal extends Cuenta{
 
                     // Verifico si el saldo me alzanza para el gasto
                     if (getSaldo() >= monto){
-                        retirar(monto);
+                        this.saldo -= monto;
                     }else {
                         //Giro en descubierto
                         this.giroDescubierto += monto - getSaldo();
@@ -53,7 +54,7 @@ public class CuentaNormal extends Cuenta{
                 }
             }else {
                 // El saldo me alzanza para el gasto
-                retirar(monto);
+                this.saldo -= monto;
             }
             res = true;
         }
